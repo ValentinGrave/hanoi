@@ -1,28 +1,35 @@
 package cfranc.hanoi;
 
 import java.util.ArrayDeque;
+import java.util.Collections;
+import java.util.Deque;
 import java.util.Queue;
 
 public class Tour implements IPile<Disque>{
 
 	int hauteurMax = 3;
 	
-	Queue<Disque> disques=new ArrayDeque<>();
-	
+        /* Transformation d'une liste FIFO (First In First Out) en une liste LIFO (Last In First Out),
+           sinon on retirerait les cercles à la base des tours et non pas ceux à leurs sommets */
+        // Création d'une liste FIFO
+	Deque<Disque> disquesFIFO = new ArrayDeque<Disque>();
+        // Conversion de la liste FIFO en liste LIFO
+        Queue<Disque> disques = Collections.asLifoQueue(disquesFIFO);
+        
 	@Override
 	public boolean empiler(Disque d) {
-        boolean res=false;
+        boolean res = false;
         if(disques.isEmpty()){
             disques.offer(d);
-            res=true;
+            res = true;
         }
         else{
-            if( (disques.element().d>d.d) && (taille()<hauteurMax) ){
-                res=true;
+            if( (disques.element().d > d.d) && (taille() < hauteurMax) ){
+                res = true;
                 disques.offer(d);
             }
             else{
-                res=false;
+                res = false;
             }
         }
         return res;
@@ -67,9 +74,9 @@ public class Tour implements IPile<Disque>{
 
 	@Override
 	public int diam() {		
-		int res=Integer.MAX_VALUE;
+		int res = Integer.MAX_VALUE;
 		Disque disqueSommet = sommet();
-		if(disqueSommet!=null){
+		if(disqueSommet != null){
 			res = disqueSommet.d;
 		}
 		return res;
